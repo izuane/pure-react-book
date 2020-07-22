@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import moment from 'moment';
+import PropTypes from 'prop-types'
 
 function Tweet({ tweet }) {
     return (
@@ -17,6 +18,12 @@ function Tweet({ tweet }) {
                     <LikeButton count={tweet.likes}/>
                     <MoreOptionsButton/>
                 </div>
+                <Comment author='somebody' message='a likable message' likes={1}/>
+                <Comment author='mr_unpopular' message='unlikable message'/>
+                <Comment author='mr_unpopular' message='another message' likes={0}/>
+                <Comment author='error_missing_message'/>
+                <Comment author={43}/> {/* Error since wrong type */}
+                <Comment message='mystery author'/>
             </div>
         </div>
     )
@@ -110,6 +117,24 @@ const testTweet = {
     retweets: 4,
     timestamp: "2016-07-30 21:24:37"
 };
+
+function Comment({ author, message, likes }) {
+    return (
+        <div>
+            <div className='author'>{author}</div>
+            <div className='message'>{message}</div>
+            <div className='likes'>
+                {likes > 0 ? likes : 'No'} likes
+            </div>
+        </div>
+    );
+}
+
+Comment.propTypes = {
+    message: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
+    likes: PropTypes.number
+}
 
 ReactDOM.render(<Tweet tweet={testTweet}/>,
                 document.querySelector('#root'));
